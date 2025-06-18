@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Productos</title>
+  <link rel="stylesheet" href="/css/productos.css" />
+</head>
+
+<body>
+  <main class="container">
+    <h1>Gestión de Productos</h1>
+    <button id="btnMostrarFormulario">Agregar producto</button>
+
+    <h2>Crear nueva categoría</h2>
+    <form id="formCategoria">
+      <input type="text" id="nombreCategoria" placeholder="Nombre de la categoría" required />
+      <button type="submit">Crear categoría</button>
+    </form>
+
+    <form id="formProducto" class="formulario oculto">
+      <h2>Nuevo Producto</h2>
+      <input type="text" id="nombre" placeholder="Nombre" required />
+      <textarea id="descripcion" placeholder="Descripción" required></textarea>
+      <input type="number" id="precio" placeholder="Precio" required />
+
+      <select id="genero" required>
+        <option value="">Género</option>
+        <option value="Hombre">Hombre</option>
+        <option value="Mujer">Mujer</option>
+        <option value="Unisex">Unisex</option>
+      </select>
+
+      <label>Color:</label>
+      <input type="text" id="color" />
+
+      <label>Stock por talle:</label>
+      <div class="talles">
+        <div><label>S:</label><input type="number" min="0" id="stock_s" value="0" /></div>
+        <div><label>M:</label><input type="number" min="0" id="stock_m" value="0" /></div>
+        <div><label>L:</label><input type="number" min="0" id="stock_l" value="0" /></div>
+        <div><label>XL:</label><input type="number" min="0" id="stock_xl" value="0" /></div>
+      </div>
+
+
+      <label for="categoria">Categoría:</label>
+      <select id="categoria" required>
+
+        <!-- <option value="">Seleccionar categoría</option>
+         Las opciones existentes se cargarán desde el backend -->
+        <!-- <option value="__nueva__">+ Crear nueva categoría</option>
+      </select> --> 
+
+      <input type="text" id="nuevaCategoria" placeholder="Nueva categoría" class="oculto" />
+
+      <!-- <label>Stock por talle:</label>
+      <div class="talles">
+        <div>
+          <label>S:</label>
+          <input type="number" min="0" id="stock_s" value="0" />
+        </div>
+        <div>
+          <label>M:</label>
+          <input type="number" min="0" id="stock_m" value="0" />
+        </div>
+        <div>
+          <label>L:</label>
+          <input type="number" min="0" id="stock_l" value="0" />
+        </div>
+        <div>
+          <label>XL:</label>
+          <input type="number" min="0" id="stock_xl" value="0" />
+        </div>
+      </div> -->
+
+      <input type="text" id="imagen" placeholder="URL de la imagen" required />
+
+      <button type="submit">Guardar producto</button>
+    </form>
+
+    <section id="listadoCategorias">
+      <!-- Aquí irán las categorías con sus productos -->
+    </section>
+  </main>
+
+  <script src="/js/productos.js"></script>
+</body>
+
+</html>
