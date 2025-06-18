@@ -85,4 +85,54 @@ body {
     entonces el contenido puede quedar escondido detras del header, esta
     es la manera de solucionarlo */
     padding-top: 80px;
+    height: 100vh;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    background-color: #dddddd;
+    color: #333;
+    font-size: 14px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+.footer__contactos {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.item_contacto {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.item_contacto img {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    bottom: 1px;
+}
+
+.item_contacto a {
+    color: #333;
+    text-decoration: none;
+}
+
+.item_contacto a:hover {
+    text-decoration: underline;
+}
+
+.creditos {
+    margin-top: 10px;
+    text-align: center;
 }

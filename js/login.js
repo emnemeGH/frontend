@@ -10,20 +10,29 @@ form.addEventListener("submit", async (e) => {
         const response = await fetch("http://localhost:4000/api/login", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
 
-        if (response.ok) {
+        // resData es la respuesta del servidor en formato JSON. Con un console log vemos su formato y accedemos a sus valores.
+        const resData = await response.json();
+
+        if (resData.codigo === 200) {
             alert("Inicio de sesión exitoso");
+
+            localStorage.setItem("token", resData.token);
+            // localStorage.setItem() solo puede guardar strings. No objetos, no arrays, solo texto. 
+            // Por eso lo convertimos a string con JSON.stringify()
+            localStorage.setItem("usuario", JSON.stringify(resData.payload));
+
             window.location.href = "../index.html";
         } else {
-            const error = await response.json();
-            alert("Error al iniciar sesión: " + error.message);
+            alert("Error al iniciar sesión: " + resData.mensaje);
         }
     } catch (err) {
-        console.error("Error:", err);
+        console.error("Error en el login:", err);
         alert("No se pudo conectar con el servidor.");
     }
 });
+

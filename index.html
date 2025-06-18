@@ -12,10 +12,11 @@
     <header>
         <div class="header-izquierda">
             <form class="header-buscador">
-                <input type="text" placeholder="Buscar productos..."/>
-                <button type="submit"><img src="img/search-interface-symbol.png" alt="Buscar" id="icono_busqueda"/></button>
+                <input type="text" placeholder="Buscar productos..." />
+                <button type="submit"><img src="img/search-interface-symbol.png" alt="Buscar"
+                        id="icono_busqueda" /></button>
             </form>
-            
+
             <div class="header-categorias">
                 <select>
                     <option value="">Categorías</option>
@@ -27,7 +28,7 @@
             </div>
 
             <div class="header-favoritos">
-                <button><img src="img/heart.png" alt="Favoritos"/></button>
+                <button><img src="img/heart.png" alt="Favoritos" title="Favoritos" /></button>
             </div>
         </div>
 
@@ -35,19 +36,41 @@
 
         <div class="header-derecha">
             <div class="header-sesion">
-                <button><img src="img/log-in.png" alt="Sesión"/></button>
+                <button id="btn-sesion"><img src="img/log-in.png" alt="Sesión" title="Sesión" id="img-sesion" /></button>
             </div>
 
             <div class="header-carrito">
-                <button><img src="img/grocery-store.png" alt="Carrito"/></button>
+                <button><img src="img/grocery-store.png" alt="Carrito" title="Carrito" /></button>
             </div>
 
             <div class="header-usuario">
-                <button><img src="img/profile-user.png" alt="Usuario"/></button>
+                <button><img src="img/profile-user.png" alt="Usuario" title="Mis datos" /></button>
             </div>
         </div>
     </header>
 
+    <footer>
+        <div class="footer__contactos">
+            <div class="item_contacto">
+                <img src="/img/arroba.png" alt="Correo" title="Mail">
+                <p>lanaylino@gmail.com</p>
+            </div>
+
+            <div class="item_contacto">
+                <img src="/img/whatsapp.png" alt="WhatsApp" title="Número">
+                <p>342844283</p>
+            </div>
+
+            <div class="item_contacto">
+                <img src="/img/instagram.png" alt="Instagram" title="Instagram">
+                <a href="https://www.instagram.com/lanaylino/" target="_blank">lanaylino</a>
+            </div>
+        </div>
+
+        <p class="creditos">Desarrollada por Conrado Peloso y Emanuel Neme</p>
+    </footer>
+
+    <script src="js/main.js"></script>
 </body>
 
 </html>
