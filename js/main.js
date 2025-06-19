@@ -1,5 +1,6 @@
 const btnSesion = document.getElementById("btn-sesion");
 const imgSesion = document.getElementById("img-sesion");
+const btnUsuario = document.getElementById("btn-usuario");
 
 document.addEventListener("DOMContentLoaded", () => {
     actualizarIconoSesion();
@@ -35,4 +36,8 @@ btnSesion.addEventListener("click", () => {
     } else {
         window.location.href = "/pages/login.html";
     }
+});
+
+btnUsuario.addEventListener("click", () => {
+    window.location.href = "/pages/datos_usuario.html";
 });

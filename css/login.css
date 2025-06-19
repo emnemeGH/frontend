@@ -4,3 +4,19 @@ form {
     max-width: 400px;
     gap: 40px;
 }
+
+.registro {
+    margin-top: -15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.registro a:active {
+    color: #523b81;
+}
+
+.registro a:hover {
+    color: #a791ce;
+}

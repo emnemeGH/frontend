@@ -13,13 +13,14 @@ async function cargarDatos() {
     document.getElementById('email').value = usuario.email;
     document.getElementById('telefono').value = usuario.telefono;
     document.getElementById('rol').value = usuario.rol;
+    document.getElementById('password').value = usuario.password;
 }
 
 
 cargarDatos();
 
 // 2. Guardar cambios
-const form = document.getElementById('formUsuario');
+const form = document.getElementById('form_usuario');
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -30,7 +31,7 @@ form.addEventListener('submit', async (e) => {
         email: form.email.value,
         telefono: form.telefono.value,
         rol: form.rol.value,
-        password: form.password.value // si no se completa, el backend puede ignorarla
+        password: form.password.value 
     };
 
     const res = await fetch(`/api/modificarUsuario/${userId}`, {
