@@ -2,7 +2,11 @@ const usuario = JSON.parse(localStorage.getItem("usuario"));
 const userId = usuario.id_usuario;
 
 async function cargarDatos() {
-    const respuesta = await fetch(`http://localhost:4000/api/obtenerDatosUsuario/${userId}`);
+    const respuesta = await fetch(`http://localhost:4000/api/obtenerDatosUsuario/${userId}`, {
+        headers: {
+            Authorization: localStorage.getItem("token")
+        }
+    });
     const datosRespuesta = await respuesta.json();
 
     // console.log(datosRespuesta);
@@ -45,7 +49,10 @@ form.addEventListener('submit', async (e) => {
     // respuesta es un objeto de tipo Response, porque se espera a que la promesa se resuelva
     const respuesta = await fetch(`http://localhost:4000/api/modificarUsuario/${userId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+            Authorization: localStorage.getItem('token')
+        },
         body: JSON.stringify(datos)
     });
 
