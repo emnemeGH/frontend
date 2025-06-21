@@ -80,27 +80,31 @@ async function cargarCategoriasEnFormulario() {
         const data = await res.json();
         const productos = data.payload[0];
 
-        const categoriasUnicas = new Set();
+        const categoriasUnicas = new Map();
 
         productos.forEach(p => {
-            if (p.categoria) {
-                categoriasUnicas.add(p.categoria);
+            if (p.categoria && !categoriasUnicas.has(p.categoria)) {
+                const idCat = p.id_categoria || p.idCategoria;
+                if (idCat) {
+                    categoriasUnicas.set(p.categoria, idCat);
+                }
             }
         });
 
         selectCategoria.innerHTML = '<option value="">Seleccionar categoría</option>';
-        categoriasUnicas.forEach(nombre => {
+        categoriasUnicas.forEach((id_categoria, nombre) => {
             const option = document.createElement('option');
-            option.value = nombre; // usamos el nombre como value
+            option.value = id_categoria;
             option.textContent = nombre;
             selectCategoria.appendChild(option);
         });
 
-        console.log("✔ Categorías cargadas en el formulario:", [...categoriasUnicas]);
+        console.log("✔ Categorías cargadas en el formulario:", categoriasUnicas);
     } catch (error) {
         console.error("❌ Error al cargar categorías en el formulario:", error);
     }
 }
+
 
 // Inicializar
 cargarProductos();
@@ -152,37 +156,25 @@ formulario.addEventListener("submit", async (e) => {
     const precio = parseFloat(document.getElementById("precio").value);
     const genero = document.getElementById("genero").value;
     const color = document.getElementById("color").value.trim();
-    const nombreCategoriaSeleccionada = document.getElementById("categoria").value;
+    const id_categoria = parseInt(document.getElementById("categoria").value);
     const imagen = document.getElementById("imagen").value.trim();
 
-    // Buscar ID de categoría real por su nombre
-    let id_categoria = null;
+    if (!id_categoria) {
+        alert("Seleccioná una categoría válida.");
+        return;
+    }
+
+    const producto = {
+        nombre,
+        descripcion,
+        precio,
+        genero,
+        id_categoria,
+        imagen
+    };
+
     try {
-        const resProd = await fetch('http://localhost:4000/api/obtenerProductos');
-        const dataProd = await resProd.json();
-        const productos = dataProd.payload[0];
-
-        for (const prod of productos) {
-            if (prod.categoria === nombreCategoriaSeleccionada && (prod.idCategoria || prod.id_categoria)) {
-                id_categoria = prod.idCategoria || prod.id_categoria;
-                break;
-            }
-        }
-
-        if (!id_categoria) {
-            alert("No se pudo encontrar el ID de la categoría seleccionada.");
-            return;
-        }
-
-        const producto = {
-            nombre,
-            descripcion,
-            precio,
-            genero,
-            id_categoria,
-            imagen
-        };
-
+        // Enviar el producto al backend
         const res = await fetch("http://localhost:4000/api/cargarProducto", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -222,3 +214,4 @@ formulario.addEventListener("submit", async (e) => {
         console.error("Error al cargar producto:", err);
     }
 });
+
