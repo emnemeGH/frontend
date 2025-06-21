@@ -1,0 +1,17 @@
+1-Buscador de productos: debe ingresarse el nombre del producto, presionar enter o un botón
+buscar y deberá cargar los productos que coincidan con esa descripción.
+
+2-Desplegable de productos: si se hace click en productos debe mostrar todos los productos,
+si se hace click en alguna categoría debe mostrar los productos que pertenezcan a esa
+categoría.
+
+3-En la visualización de productos deberá poder filtrarse por género y por categoría.
+
+4-Deberá visualizarse la foto del mismo, una descripción, el precio y un botón de agregar al carrito. Además deberá
+contar con un visualizador de cuotas permitiendo 1,3,6,9 o 12 cuotas y mostrar el precio de
+cada cuota según la elección.
+
+5-Deberá mostrar los productos agregados al carrito, con una foto del mismo, el nombre, el
+precio y el total del carrito.
+Además debe contar con la opción de eliminar el producto del carrito y un botón pagar que
+llevará a la pantalla de pago.

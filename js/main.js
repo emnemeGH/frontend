@@ -39,7 +39,11 @@ btnSesion.addEventListener("click", () => {
 });
 
 btnUsuario.addEventListener("click", () => {
-    window.location.href = "/pages/datos_usuario.html";
+    if (!estaLogueado()) {
+        window.location.href = "/pages/registro.html";
+    } else {
+        window.location.href = "/pages/datos_usuario.html";
+    }
 });
 
 // MUESTRA DE PRODUCTOS EN LA PAGINA PRINCIPAL
