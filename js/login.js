@@ -15,14 +15,15 @@ form.addEventListener("submit", async (e) => {
             body: JSON.stringify(data),
         });
 
+        // GUARDAR EL TOKEN JWT RECIBIDO EN EL CAMPO 'jwt' DEL JSON
         // resData es la respuesta del servidor en formato JSON. Con un console log vemos su formato y accedemos a sus valores.
         const resData = await response.json();
-
+        
         if (resData.codigo === 200) {
             alert("Inicio de sesión exitoso");
-
-            localStorage.setItem("token", resData.token);
+            
             // localStorage.setItem() solo puede guardar strings. No objetos, no arrays, solo texto. 
+            localStorage.setItem("token", resData.jwt);
             // Por eso lo convertimos a string con JSON.stringify()
             localStorage.setItem("usuario", JSON.stringify(resData.payload));
 
@@ -30,6 +31,7 @@ form.addEventListener("submit", async (e) => {
         } else {
             alert("Error al iniciar sesión: " + resData.mensaje);
         }
+
     } catch (err) {
         console.error("Error en el login:", err);
         alert("No se pudo conectar con el servidor.");

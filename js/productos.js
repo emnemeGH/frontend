@@ -57,7 +57,7 @@ async function cargarProductos() {
                     <div class="descripcion">
                         <strong>${prod.producto}</strong><br>
                         ${prod.descripcion}<br>
-                        <small>$${prod.precio}</small><br>
+                        <p>$${prod.precio}</p><br>
                         <small><em>${inventarioTexto}</em></small>
                     </div>
                     <button class="btn-editar">Editar</button>
@@ -74,32 +74,45 @@ async function cargarProductos() {
     }
 }
 
+// ✅ Usar nuevo endpoint oficial para cargar categorías
 async function cargarCategoriasEnFormulario() {
     try {
-        const res = await fetch('http://localhost:4000/api/obtenerProductos');
-        const data = await res.json();
-        const productos = data.payload[0];
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("No estás logueado. Iniciá sesión primero.");
+            window.location.href = "/pages/login.html";
+            return;
+        }
 
-        const categoriasUnicas = new Map();
-
-        productos.forEach(p => {
-            if (p.categoria && !categoriasUnicas.has(p.categoria)) {
-                const idCat = p.id_categoria || p.idCategoria;
-                if (idCat) {
-                    categoriasUnicas.set(p.categoria, idCat);
-                }
+         // SE ENVIA EL TOKEN CON EL PREFIJO 'Bearer ' QUE REQUIERE EL BACKEND PARA JWT
+        const res = await fetch("http://localhost:4000/api/obtenerCategorias", {
+            headers: {
+                "Authorization": `Bearer ${token}`
             }
         });
 
+        const data = await res.json();
+
+        console.log("🔍 Respuesta cruda de /api/obtenerCategorias:", data);
+
+        if (!data.payload || !Array.isArray(data.payload)) {
+            
+            throw new Error("Respuesta inesperada al obtener categorías");
+        }
+
+         const categorias = Array.isArray(data.payload[0]) ? data.payload[0] : data.payload;
+
         selectCategoria.innerHTML = '<option value="">Seleccionar categoría</option>';
-        categoriasUnicas.forEach((id_categoria, nombre) => {
+
+        categorias.forEach(cat => {
+            console.log("🔍 Categoría:", cat);
             const option = document.createElement('option');
-            option.value = id_categoria;
-            option.textContent = nombre;
+            option.value = cat.id_categoria;
+            option.textContent = cat.nombre;
             selectCategoria.appendChild(option);
         });
 
-        console.log("✔ Categorías cargadas en el formulario:", categoriasUnicas);
+        console.log("✔ Categorías cargadas desde /api/obtenerCategorias");
     } catch (error) {
         console.error("❌ Error al cargar categorías en el formulario:", error);
     }
@@ -143,6 +156,7 @@ formCategoria.addEventListener("submit", async (e) => {
     } catch (err) {
         console.error("Error al crear categoría:", err);
     }
+
     formulario.classList.add('oculto');
     formCategoria.reset();
 });
@@ -174,10 +188,14 @@ formulario.addEventListener("submit", async (e) => {
     };
 
     try {
-        // Enviar el producto al backend
+        const token = localStorage.getItem("token");
+
         const res = await fetch("http://localhost:4000/api/cargarProducto", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: token
+            },
             body: JSON.stringify(producto),
         });
 
@@ -186,7 +204,9 @@ formulario.addEventListener("submit", async (e) => {
         if (data.codigo === 200) {
             alert("Producto creado correctamente");
 
-            const idProducto = data.payload[0].idCategoria; // id generado en backend
+            console.log("Payload recibido al crear producto:", data.payload);
+            const idProducto = data.payload[0].idCategoria;
+
             const inventarioLocal = JSON.parse(localStorage.getItem("inventarioSimulado")) || [];
             const nuevosRegistros = [];
 
@@ -206,7 +226,7 @@ formulario.addEventListener("submit", async (e) => {
 
             formulario.reset();
             cargarProductos();
-            cargarCategoriasEnFormulario(); // actualiza el select
+            cargarCategoriasEnFormulario();
         } else {
             alert("Error: " + data.mensaje);
         }
@@ -214,4 +234,3 @@ formulario.addEventListener("submit", async (e) => {
         console.error("Error al cargar producto:", err);
     }
 });
-
