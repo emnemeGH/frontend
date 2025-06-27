@@ -53,15 +53,18 @@ async function cargarProductos() {
                 });
 
                 tarjeta.innerHTML = `
-                    <img src="${prod.imagen || prod.ulrImagen || ''}" alt="${prod.producto}">
+                    <img src="${prod.imagen || prod.ulrImagen || ""}" alt="${prod.producto
+                    }" class="img-producto">
                     <div class="descripcion">
                         <strong>${prod.producto}</strong><br>
                         ${prod.descripcion}<br>
                         <p>$${prod.precio}</p><br>
                         <small><em>${inventarioTexto}</em></small>
                     </div>
-                    <button class="btn-editar">Editar</button>
-                    <button class="btn-eliminar">Eliminar</button>
+                    <div>
+                        <button class="btn-editar">Editar</button>
+                        <button class="btn-eliminar">Eliminar</button>
+                    </div>
                 `;
                 grid.appendChild(tarjeta);
             });
@@ -74,49 +77,42 @@ async function cargarProductos() {
     }
 }
 
-// ✅ Usar nuevo endpoint oficial para cargar categorías
 async function cargarCategoriasEnFormulario() {
-    try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            alert("No estás logueado. Iniciá sesión primero.");
-            window.location.href = "/pages/login.html";
-            return;
-        }
+    const token = localStorage.getItem("token");
+    if (!token) {
+        alert("No estás logueado. Iniciá sesión primero.");
+        window.location.href = "/pages/login.html";
+        return;
+    }
 
-         // SE ENVIA EL TOKEN CON EL PREFIJO 'Bearer ' QUE REQUIERE EL BACKEND PARA JWT
+    try {
         const res = await fetch("http://localhost:4000/api/obtenerCategorias", {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
+            headers: { Authorization: token }
         });
 
         const data = await res.json();
 
-        console.log("🔍 Respuesta cruda de /api/obtenerCategorias:", data);
-
-        if (!data.payload || !Array.isArray(data.payload)) {
-            
-            throw new Error("Respuesta inesperada al obtener categorías");
+        if (data.codigo === -1 && data.mensaje === "Token expirado") {
+            alert("Tu sesión ha expirado. Iniciá sesión nuevamente.");
+            localStorage.removeItem("token");
+            localStorage.removeItem("usuario");
+            window.location.href = "/pages/login.html";
+            return;
         }
 
-         const categorias = Array.isArray(data.payload[0]) ? data.payload[0] : data.payload;
+        const categorias = data.payload;
 
         selectCategoria.innerHTML = '<option value="">Seleccionar categoría</option>';
 
         categorias.forEach(cat => {
-            console.log("🔍 Categoría:", cat);
-            const option = document.createElement('option');
-            option.value = cat.id_categoria;
-            option.textContent = cat.nombre;
-            selectCategoria.appendChild(option);
+            selectCategoria.innerHTML += `<option value="${cat.id_categoria}">${cat.nombre}</option>`;
         });
 
-        console.log("✔ Categorías cargadas desde /api/obtenerCategorias");
-    } catch (error) {
-        console.error("❌ Error al cargar categorías en el formulario:", error);
+    } catch {
+        alert("Error al cargar las categorías");
     }
 }
+
 
 
 // Inicializar
