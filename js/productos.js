@@ -3,6 +3,9 @@ const formulario = document.getElementById('formProducto');
 const selectCategoria = document.getElementById('categoria');
 const contenedorCategorias = document.getElementById('listadoCategorias');
 
+cargarProductos();
+cargarCategoriasEnFormulario();
+
 // Mostrar/ocultar formulario
 btnMostrarFormulario.addEventListener('click', () => {
     formulario.classList.toggle('oculto');
@@ -15,7 +18,6 @@ async function cargarProductos() {
         const res = await fetch('http://localhost:4000/api/obtenerProductos');
         const data = await res.json();
         const productos = data.payload[0];
-        console.log("Productos completos:", productos);
 
         // Crear mapa de categorías con productos
         const categoriasMap = {};
@@ -26,8 +28,6 @@ async function cargarProductos() {
             }
             categoriasMap[nombre].push(p);
         });
-
-        console.log("Categorías agrupadas:", categoriasMap);
 
         contenedorCategorias.innerHTML = '';
 
@@ -136,12 +136,6 @@ async function cargarCategoriasEnFormulario() {
     }
 }
 
-
-
-// Inicializar
-cargarProductos();
-cargarCategoriasEnFormulario();
-
 // CREAR CATEGORÍA
 const formCategoria = document.getElementById("formCategoria");
 formCategoria.addEventListener("submit", async (e) => {
@@ -164,20 +158,19 @@ formCategoria.addEventListener("submit", async (e) => {
         });
 
         const data = await response.json();
+
         if (data.codigo === 200) {
             alert("Categoría creada con éxito");
+
             formCategoria.reset();
-            cargarProductos();
-            cargarCategoriasEnFormulario(); // actualiza el select
+            cargarCategoriasEnFormulario();
         } else {
             alert("Error: " + data.mensaje);
         }
     } catch (err) {
         console.error("Error al crear categoría:", err);
+        alert("Error al conectar con el servidor: " + err.message);
     }
-
-    formulario.classList.add('oculto');
-    formCategoria.reset();
 });
 
 // CREAR PRODUCTO
@@ -188,7 +181,6 @@ formulario.addEventListener("submit", async (e) => {
     const descripcion = document.getElementById("descripcion").value.trim();
     const precio = parseFloat(document.getElementById("precio").value);
     const genero = document.getElementById("genero").value;
-    const color = document.getElementById("color").value.trim();
     const id_categoria = parseInt(document.getElementById("categoria").value);
     const imagen = document.getElementById("imagen").value.trim();
 
@@ -255,8 +247,10 @@ formulario.addEventListener("submit", async (e) => {
                 }
             }
 
-
+            // Limpia todos los campos del formulario (como un "borrar todo").
             formulario.reset();
+
+            // actualiza los productos y las categorias
             cargarProductos();
             cargarCategoriasEnFormulario();
         } else {
