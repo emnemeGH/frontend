@@ -61,10 +61,34 @@ async function cargarProductos() {
                         <small><em>${inventarioTexto}</em></small>
                     </div>
                     <div>
-                        <button class="btn-editar">Editar</button>
+                        <button class="btn-editar" data-id="${prod.id_producto}">Editar</button>
                         <button class="btn-eliminar">Eliminar</button>
                     </div>
                 `;
+                // BOTON MODIFICAR
+                const btnEditar = tarjeta.querySelector(".btn-editar");
+
+                btnEditar.addEventListener("click", async () => {
+                    const idProducto = btnEditar.getAttribute("data-id"); // ✅ Definís la variable correctamente acá
+
+                    try {
+                        const token = localStorage.getItem("token");
+                        const res = await fetch(`http://localhost:4000/api/obtenerDatosProducto/${idProducto}`, {
+                            headers: {
+                                Authorization: token
+                            }
+                        });
+
+                        const data = await res.json();
+                        console.log("📦 Datos obtenidos para editar:", data);
+
+                        // Acá luego podés precargar el formulario con esos datos
+
+                    } catch (err) {
+                        console.error("❌ Error al obtener datos del producto:", err);
+                    }
+                });
+
                 grid.appendChild(tarjeta);
             });
 
@@ -200,24 +224,37 @@ formulario.addEventListener("submit", async (e) => {
             alert("Producto creado correctamente");
 
             console.log("Payload recibido al crear producto:", data.payload);
-            const idProducto = data.payload[0].idCategoria;
+            const idProducto = data.payload[0].id_producto || data.payload[0].idProducto || data.payload[0].idCategoria;
 
-            const inventarioLocal = JSON.parse(localStorage.getItem("inventarioSimulado")) || [];
-            const nuevosRegistros = [];
 
-            ["S", "M", "L", "XL"].forEach(talle => {
+            // Crear los registros de inventario en el backend
+            const talles = ["S", "M", "L", "XL"];
+
+            for (const talle of talles) {
                 const cantidad = parseInt(document.getElementById(`stock_${talle.toLowerCase()}`).value);
                 if (cantidad > 0) {
-                    nuevosRegistros.push({
-                        id_producto: idProducto,
-                        talle,
-                        color,
-                        stock: cantidad
-                    });
-                }
-            });
+                    try {
+                        const resInv = await fetch("http://localhost:4000/api/crearInventario", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: token
+                            },
+                            body: JSON.stringify({
+                                id_producto: idProducto,
+                                talle,
+                                color,
+                                stock: cantidad
+                            }),
+                        });
 
-            localStorage.setItem("inventarioSimulado", JSON.stringify([...inventarioLocal, ...nuevosRegistros]));
+                        const dataInv = await resInv.json();
+                    } catch (err) {
+                        console.error(`Error al enviar inventario talle ${talle}:`, err);
+                    }
+                }
+            }
+
 
             formulario.reset();
             cargarProductos();
