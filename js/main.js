@@ -3,6 +3,10 @@ const imgSesion = document.getElementById("img-sesion");
 const btnUsuario = document.getElementById("btn-usuario");
 const btnGestion = document.getElementById("btn-gestion");
 const selectCategoria = document.getElementById('categoria');
+const inputProductos = document.getElementById("input-productos");
+const buscadorProductos = document.getElementById("buscador-productos");
+
+let todosLosProductos = [];
 
 document.addEventListener("DOMContentLoaded", () => {
     actualizarIconoSesion();
@@ -79,34 +83,38 @@ async function cargarProductosEnPagina() {
     try {
         const res = await fetch('http://localhost:4000/api/obtenerProductos');
         const data = await res.json();
-        const productos = data.payload[0]; // asumiendo la estructura que usás
+        todosLosProductos = data.payload[0]; 
 
-        const contenedor = document.getElementById('productos-lista');
-        contenedor.innerHTML = ''; // limpiar
-
-        productos.forEach(prod => {
-            const tarjeta = document.createElement('div');
-            tarjeta.classList.add('tarjeta');
-
-            tarjeta.innerHTML = `
-                <img src="${prod.imagen || prod.ulrImagen || ''}" alt="${prod.producto}" class="img-producto">
-                <div class="descripcion">
-                    <strong class= "nombre-producto">${prod.producto}</strong><br>
-                    ${prod.descripcion}<br>
-                    <small class="precio">$${prod.precio}</small><br>
-                    <small class="categoria">Categoría: ${prod.categoria}</small>
-                </div>
-                <div class="botones">
-                    <button class="btn-comprar">Comprar</button>
-                    <button class="btn-ver">Ver Producto</button>
-                </div>
-            `;
-
-            contenedor.appendChild(tarjeta);
-        });
+        mostrarProductos(todosLosProductos);
     } catch (error) {
         console.error('Error al cargar productos para la página:', error);
     }
+}
+
+function mostrarProductos(productos) {
+    const contenedor = document.getElementById('productos-lista');
+    contenedor.innerHTML = '';
+
+    productos.forEach(prod => {
+        const tarjeta = document.createElement('div');
+        tarjeta.classList.add('tarjeta');
+
+        tarjeta.innerHTML = `
+            <img src="${prod.imagen || prod.ulrImagen || ''}" alt="${prod.producto}" class="img-producto">
+            <div class="descripcion">
+                <strong class="nombre-producto">${prod.producto}</strong><br>
+                ${prod.descripcion}<br>
+                <small class="precio">$${prod.precio}</small><br>
+                <small class="categoria">Categoría: ${prod.categoria}</small>
+            </div>
+            <div class="botones">
+                <button class="btn-comprar">Comprar</button>
+                <button class="btn-ver">Ver Producto</button>
+            </div>
+        `;
+
+        contenedor.appendChild(tarjeta);
+    });
 }
 
 async function cargarCategorias() {
@@ -136,4 +144,42 @@ async function cargarCategorias() {
     } catch {
         alert("No estas logueado, no podes ver categorias");
     }
+}
+
+selectCategoria.addEventListener("change", (e) => {
+    filtrarProductosPorCategoria(e);
+});
+
+// Función para filtrar los productos por categoría
+// se obtiene el value del select que disparo el evento
+// El primer select vale 0 asi que si se selecciona ese muestra todos los productos
+// Se crea un array que contiene los productos que cumplen con la condicion del filter y se lo pasa por parametro a mostrarProductos
+function filtrarProductosPorCategoria(evento) {
+    const categoriaSeleccionada = parseInt(evento.target.value);
+
+    if (categoriaSeleccionada === 0) {
+        mostrarProductos(todosLosProductos);
+    } else {
+        const productosFiltrados = todosLosProductos.filter(
+            prod => prod.idCategoria === categoriaSeleccionada,
+        );
+        mostrarProductos(productosFiltrados);
+    }
+}
+
+buscadorProductos.addEventListener("submit", (e) => {
+    filtrarProductosPorNombre(e);
+})
+
+function filtrarProductosPorNombre(evento) {
+    evento.preventDefault();
+    const productoIngresado = inputProductos.value.trim().toLowerCase();
+
+    if(productoIngresado=== "") {
+        mostrarProductos(todosLosProductos)
+        return;
+    }
+    // includes() revisa si el texto ingresado está contenido dentro del nombre del producto.
+    const productoBuscado = todosLosProductos.filter(prod => prod.producto.toLowerCase().includes(productoIngresado));
+    mostrarProductos(productoBuscado);
 }

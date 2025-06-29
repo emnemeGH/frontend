@@ -5,6 +5,17 @@
     padding: 0;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    /* Como el header tiene position fixed no ocupa espacio en el dom
+    entonces el contenido puede quedar escondido detras del header, esta
+    es la manera de solucionarlo */
+    padding-top: 80px;
+    min-height: 100vh;
+    background: linear-gradient(to right, #fce4ec, #e1cae6, #fce4ec);
+}
+
 header {
     position: fixed;
     top: 0;
@@ -80,12 +91,10 @@ header button img {
     height: 24px;
 }
 
-body {
-    /* Como el header tiene position fixed no ocupa espacio en el dom
-    entonces el contenido puede quedar escondido detras del header, esta
-    es la manera de solucionarlo */
-    padding-top: 80px;
-    min-height: 100vh;
+main {
+    /* esto hace que el contenido de main ocupe todo el espacio disponible, 
+    empujando al footer hacia abajo si hay poco contenido. */
+    flex: 1;
 }
 
 .img-producto {
