@@ -89,12 +89,16 @@ async function cargarProductosEnPagina() {
             tarjeta.classList.add('tarjeta');
 
             tarjeta.innerHTML = `
-                <img src="${prod.imagen || prod.ulrImagen || ''}" alt="${prod.producto}">
+                <img src="${prod.imagen || prod.ulrImagen || ''}" alt="${prod.producto}" class="img-producto">
                 <div class="descripcion">
                     <strong class= "nombre-producto">${prod.producto}</strong><br>
                     ${prod.descripcion}<br>
-                    <small>$${prod.precio}</small><br>
-                    <small><em>Categoría: ${prod.categoria}</em></small>
+                    <small class="precio">$${prod.precio}</small><br>
+                    <small class="categoria">Categoría: ${prod.categoria}</small>
+                </div>
+                <div class="botones">
+                    <button class="btn-comprar">Comprar</button>
+                    <button class="btn-ver">Ver Producto</button>
                 </div>
             `;
 

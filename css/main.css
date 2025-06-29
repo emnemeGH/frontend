@@ -85,7 +85,102 @@ body {
     entonces el contenido puede quedar escondido detras del header, esta
     es la manera de solucionarlo */
     padding-top: 80px;
-    height: 100vh;
+    min-height: 100vh;
+}
+
+.img-producto {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    max-width: 200px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.productos-grid {
+    padding: 20px 100px;
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    margin-bottom: 40px;
+}
+
+.tarjeta {
+    max-width: 250px;
+    max-height: 500px;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 6px 14px #0000001a;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 18px #00000026;
+}
+
+.descripcion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: #4a3a5d;
+}
+
+.descripcion strong {
+    font-size: 1.05rem;
+    color: #502c50;
+    margin-bottom: -10px;
+}
+
+.descripcion .precio {
+    margin-top: 10px;
+}
+
+.botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.botones button {
+    padding: 8px 16px;
+    border-radius: 15px;
+    border: 1px solid #1f161e;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-comprar {
+    background-color: #8e1abc; 
+    color: white;
+    border-color: #2c0623;
+}
+
+.btn-comprar:hover {
+    background-color: #520469; 
+    transform: scale(1.05);
+}
+
+.btn-ver {
+    background-color: #f9f9f975;
+    color: #1a1919;
+}
+
+.btn-ver:hover {
+    background-color: #c2bebe;
+    transform: scale(1.05);
 }
 
 footer {
@@ -98,8 +193,6 @@ footer {
     color: #333;
     font-size: 14px;
     width: 100%;
-    position: absolute;
-    bottom: 0;
 }
 
 .footer__contactos {
@@ -137,40 +230,4 @@ footer {
     text-align: center;
 }
 
-/* ESTILOS PRODUCTOS */
 
-.productos-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-}
-
-.tarjeta {
-    background-color: #fff;
-    /* border: 1px solid #ccc; */
-    padding: 12px;
-    border-radius: 8px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 220px;
-    transition: transform 0.2s ease;
-    margin-top: 10px;
-}
-
-.tarjeta:hover {
-    transform: scale(1.03);
-}
-
-.tarjeta img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-}
-
-.nombre-producto {
-    font-size: 20px;
-    font-weight: bold;
-    display: block;
-    color: #333;
-}

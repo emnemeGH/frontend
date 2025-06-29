@@ -53,8 +53,7 @@ async function cargarProductos() {
                 });
 
                 tarjeta.innerHTML = `
-                    <img src="${prod.imagen || prod.ulrImagen || ""}" alt="${prod.producto
-                    }" class="img-producto">
+                    <img src="${prod.imagen || prod.ulrImagen || ""}" alt="${prod.producto}" class="img-producto">
                     <div class="descripcion">
                         <strong>${prod.producto}</strong><br>
                         ${prod.descripcion}<br>
