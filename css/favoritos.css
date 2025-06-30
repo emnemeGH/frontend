@@ -1,0 +1,88 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(to right, #fce4ec, #e1cae6, #fce4ec);
+}
+
+header {
+    font-family: 'Inter', sans-serif;
+    width: 100vw;
+    padding: 20px;
+    background-color: #f1efef;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2rem;
+    color: #541766;
+}
+
+.estrella {
+    width: 36px;
+    height: 36px;
+    position: relative;
+    top: 5px;
+}
+
+main {
+    padding: 30px 20px;
+}
+
+.productos-grid {
+    padding: 20px 100px;
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.tarjeta {
+    max-width: 250px;
+    max-height: 500px;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 6px 14px #0000001a;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 18px #00000026;
+}
+
+.img-producto {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    max-width: 200px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.tarjeta strong {
+    font-size: 1.05rem;
+    color: #502c50;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.tarjeta p {
+    font-size: 1rem;
+    color: #777;
+    margin: 0;
+}

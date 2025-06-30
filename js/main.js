@@ -5,6 +5,7 @@ const btnGestion = document.getElementById("btn-gestion");
 const selectCategoria = document.getElementById('categoria');
 const inputProductos = document.getElementById("input-productos");
 const buscadorProductos = document.getElementById("buscador-productos");
+const botonFavoritos = document.getElementById("btn-favoritos"); 
 
 let todosLosProductos = [];
 
@@ -83,7 +84,8 @@ async function cargarProductosEnPagina() {
     try {
         const res = await fetch('http://localhost:4000/api/obtenerProductos');
         const data = await res.json();
-        todosLosProductos = data.payload[0]; 
+        todosLosProductos = data.payload[0];
+        console.log(todosLosProductos);
 
         mostrarProductos(todosLosProductos);
     } catch (error) {
@@ -100,7 +102,8 @@ function mostrarProductos(productos) {
         tarjeta.classList.add('tarjeta');
 
         tarjeta.innerHTML = `
-            <img src="${prod.imagen || prod.ulrImagen || ''}" alt="${prod.producto}" class="img-producto">
+            <img src="${prod.imagen || prod.ulrImagen || ""}" alt="${prod.producto
+            }" class="img-producto">
             <div class="descripcion">
                 <strong class="nombre-producto">${prod.producto}</strong><br>
                 ${prod.descripcion}<br>
@@ -108,7 +111,7 @@ function mostrarProductos(productos) {
                 <small class="categoria">Categoría: ${prod.categoria}</small>
             </div>
             <div class="botones">
-                <button class="btn-comprar">Comprar</button>
+                <button class="btn-comprar" id="btn-comprar">Comprar</button>
                 <button class="btn-ver">Ver Producto</button>
             </div>
         `;
@@ -175,7 +178,7 @@ function filtrarProductosPorNombre(evento) {
     evento.preventDefault();
     const productoIngresado = inputProductos.value.trim().toLowerCase();
 
-    if(productoIngresado=== "") {
+    if (productoIngresado === "") {
         mostrarProductos(todosLosProductos)
         return;
     }
@@ -183,3 +186,7 @@ function filtrarProductosPorNombre(evento) {
     const productoBuscado = todosLosProductos.filter(prod => prod.producto.toLowerCase().includes(productoIngresado));
     mostrarProductos(productoBuscado);
 }
+
+botonFavoritos.addEventListener("click", () => {
+    window.location.href = "/pages/favoritos.html";
+});
