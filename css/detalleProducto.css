@@ -1,0 +1,109 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(to right, #f9f5ff, #e6e0f1);
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    max-width: 1000px;
+    width: 100%;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px #0000001a;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #5b3b74;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.detalle-producto {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.detalle-producto img {
+    width: 320px;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 6px 16px #0000001a;
+}
+
+.detalle-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.detalle-info h2 {
+    color: #50376d;
+    font-size: 1.6rem;
+}
+
+.detalle-info p {
+    font-size: 1rem;
+    color: #4a3a5d;
+}
+
+.detalle-info .precio {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #6c4c91;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px #0000000d;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: center;
+    font-size: 1rem;
+    color: #4a3a5d;
+}
+
+th {
+    background-color: #e6d9ec;
+    color: #502c50;
+    font-weight: bold;
+}
+
+td {
+    background-color: #f9f5ff;
+}
+
+.btn-volver {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #5b3b74;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-volver:hover {
+    background-color: #402c60;
+}

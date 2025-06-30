@@ -41,9 +41,7 @@ async function cargarProductos() {
             grid.classList.add('productos-grid');
 
             categoriasMap[nombreCategoria].forEach(prod => {
-                //console.log("Producto actual:", prod);
-                const idProducto = prod.id_producto || prod.idProducto || prod.id;
-                //console.log("idProducto asignado:", idProducto);
+                const idProducto = prod.idProducto;
 
                 const tarjeta = document.createElement('div');
                 tarjeta.classList.add('tarjeta');
@@ -62,10 +60,9 @@ async function cargarProductos() {
     `;
 
                 const btnEditar = tarjeta.querySelector(".btn-editar");
-                //console.log("Botón editar creado:", btnEditar);
-                //console.log("data-id del botón:", btnEditar.getAttribute("data-id"));
 
                 btnEditar.addEventListener("click", async () => {
+                    const idProducto = btnEditar.getAttribute('data-id');
                     console.log("ID del producto a editar (capturado):", idProducto);
 
                     try {
@@ -74,24 +71,13 @@ async function cargarProductos() {
                             headers: { Authorization: token }
                         });
                         const data = await res.json();
-                        console.log("📦 Datos obtenidos para editar:", data);
-
-                        if (data.codigo === 200 && Array.isArray(data.payload)) {
-                            const productos = data.payload[0];
-                            const inventario = data.payload[1];
-                            const inventarioFiltrado = inventario.filter(p => p.id_producto == idProducto);
-
-                            if (inventarioFiltrado.length === 0) {
-                                console.warn("⚠️ No se encontró inventario en la respuesta.");
-                                return;
-                            }
-
-                            console.log("📋 Inventario del producto:", inventarioFiltrado);
-                            //mostrarFormularioEdicion(inventarioFiltrado);
-                        }
+                        console.log("Datos obtenidos para editar:", data);
                     } catch (err) {
                         console.error("Error al obtener datos del producto:", err);
                     }
+
+                    // Redirigir a la página de edición del producto
+                    window.location.href = `/pages/detalleProducto.html?id=${idProducto}`;
                 });
 
                 grid.appendChild(tarjeta);

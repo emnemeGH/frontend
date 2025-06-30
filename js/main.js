@@ -87,7 +87,6 @@ async function cargarProductosEnPagina() {
         const res = await fetch('http://localhost:4000/api/obtenerProductos');
         const data = await res.json();
         todosLosProductos = data.payload[0];
-        console.log(todosLosProductos);
 
         mostrarProductos(todosLosProductos);
     } catch (error) {
@@ -118,9 +117,16 @@ function mostrarProductos(productos) {
             </div>
             <div class="botones">
                 <button class="btn-comprar" id="btn-comprar">Comprar</button>
-                <button class="btn-ver">Ver Producto</button>
+                <button class="btn-ver" data-id="${prod.idProducto}">Ver Producto</button>
             </div>
         `;
+
+        //IR A DETALLE DEL PRODUCTO
+        const btnVer = tarjeta.querySelector('.btn-ver');
+        btnVer.addEventListener('click', () => {
+            const idProducto = btnVer.getAttribute('data-id');
+            window.location.href = `/pages/detalleProducto.html?id=${idProducto}`;
+        });
 
         contenedor.appendChild(tarjeta);
 
