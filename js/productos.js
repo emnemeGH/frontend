@@ -41,56 +41,58 @@ async function cargarProductos() {
             grid.classList.add('productos-grid');
 
             categoriasMap[nombreCategoria].forEach(prod => {
+                //console.log("Producto actual:", prod);
+                const idProducto = prod.id_producto || prod.idProducto || prod.id;
+                //console.log("idProducto asignado:", idProducto);
+
                 const tarjeta = document.createElement('div');
                 tarjeta.classList.add('tarjeta');
 
                 tarjeta.innerHTML = `
-                    <img src="${prod.imagen || prod.ulrImagen || ""}" alt="${prod.producto}" class="img-producto">
-                    <div class="descripcion">
-                        <strong>${prod.producto}</strong><br>
-                        ${prod.descripcion}<br>
-                        <p>$${prod.precio}</p><br>
-                    </div>
-                    <div>
-                        <button class="btn-editar" data-id="${prod.id_producto}">Editar</button>
-                        <button class="btn-eliminar">Eliminar</button>
-                    </div>
-                `;
-                // BOTON MODIFICAR
+      <img src="${prod.imagen || prod.ulrImagen || ''}" alt="${prod.producto}" class="img-producto">
+      <div class="descripcion">
+        <strong>${prod.producto}</strong><br>
+        ${prod.descripcion}<br>
+        <p>$${prod.precio}</p><br>
+      </div>
+      <div>
+        <button class="btn-editar" data-id="${idProducto}">Editar</button>
+        <button class="btn-eliminar">Eliminar</button>
+      </div>
+    `;
+
                 const btnEditar = tarjeta.querySelector(".btn-editar");
-                
-                
+                //console.log("Botón editar creado:", btnEditar);
+                //console.log("data-id del botón:", btnEditar.getAttribute("data-id"));
+
                 btnEditar.addEventListener("click", async () => {
-                    const idProducto = btnEditar.dataset.id;
-                    console.log("ID del producto a editar:", idProducto);
+                    console.log("ID del producto a editar (capturado):", idProducto);
 
                     try {
                         const token = localStorage.getItem("token");
                         const res = await fetch(`http://localhost:4000/api/obtenerDatosProducto/${idProducto}`, {
-                            headers: {
-                                Authorization: token
-                            }
+                            headers: { Authorization: token }
                         });
-
                         const data = await res.json();
                         console.log("📦 Datos obtenidos para editar:", data);
 
                         if (data.codigo === 200 && Array.isArray(data.payload)) {
+                            const productos = data.payload[0];
                             const inventario = data.payload[1];
-                            if (!Array.isArray(inventario) || inventario.length === 0) {
+                            const inventarioFiltrado = inventario.filter(p => p.id_producto == idProducto);
+
+                            if (inventarioFiltrado.length === 0) {
                                 console.warn("⚠️ No se encontró inventario en la respuesta.");
                                 return;
                             }
 
-                            console.log("📋 Inventario del producto:", inventario);
-                            mostrarFormularioEdicion(inventario);
+                            console.log("📋 Inventario del producto:", inventarioFiltrado);
+                            //mostrarFormularioEdicion(inventarioFiltrado);
                         }
-
                     } catch (err) {
                         console.error("Error al obtener datos del producto:", err);
                     }
                 });
-
 
                 grid.appendChild(tarjeta);
             });
@@ -265,81 +267,81 @@ formulario.addEventListener("submit", async (e) => {
     }
 });
 
-function mostrarFormularioEdicion(inventario) {
-    const formulario = document.getElementById("formProducto");
-    formulario.classList.remove("oculto");
+// function mostrarFormularioEdicion(inventario) {
+//     const formulario = document.getElementById("formProducto");
+//     formulario.classList.remove("oculto");
 
-    const contenedorTalles = formulario.querySelector(".talles");
-    contenedorTalles.innerHTML = "";
+//     const contenedorTalles = formulario.querySelector(".talles");
+//     contenedorTalles.innerHTML = "";
 
-    inventario.forEach(item => {
-        console.log("📦 Item de inventario:", item); // Debug clave
-        const div = document.createElement("div");
-        div.innerHTML = `
-            <label>${item.color} - ${item.talle}:</label>
-            <input type="number" min="0" 
-                value="${item.stock}" 
-                data-id="${item.idInventario}" 
-                data-original="${item.stock}" 
-                class="campo-stock" />
-        `;
-        contenedorTalles.appendChild(div);
-    });
+//     inventario.forEach(item => {
+//         console.log("📦 Item de inventario:", item); // Debug clave
+//         const div = document.createElement("div");
+//         div.innerHTML = `
+//             <label>${item.color} - ${item.talle}:</label>
+//             <input type="number" min="0"
+//                 value="${item.stock}"
+//                 data-id="${item.idInventario}"
+//                 data-original="${item.stock}"
+//                 class="campo-stock" />
+//         `;
+//         contenedorTalles.appendChild(div);
+//     });
 
-    const btnGuardar = document.createElement("button");
-    btnGuardar.id = "btnGuardarCambios";
-    btnGuardar.textContent = "Guardar cambios de stock";
-    formulario.appendChild(btnGuardar);
+//     const btnGuardar = document.createElement("button");
+//     btnGuardar.id = "btnGuardarCambios";
+//     btnGuardar.textContent = "Guardar cambios de stock";
+//     formulario.appendChild(btnGuardar);
 
-    btnGuardar.addEventListener("click", async (e) => {
-        e.preventDefault();
-        const token = localStorage.getItem("token");
+//     btnGuardar.addEventListener("click", async (e) => {
+//         e.preventDefault();
+//         const token = localStorage.getItem("token");
 
-        const campos = formulario.querySelectorAll(".campo-stock");
-        let huboCambios = false;
+//         const campos = formulario.querySelectorAll(".campo-stock");
+//         let huboCambios = false;
 
-        for (const input of campos) {
-            const stockNuevo = parseInt(input.value);
-            const stockOriginal = parseInt(input.dataset.original);
-            const idInventario = parseInt(input.dataset.id);
+//         for (const input of campos) {
+//             const stockNuevo = parseInt(input.value);
+//             const stockOriginal = parseInt(input.dataset.original);
+//             const idInventario = parseInt(input.dataset.id);
 
-            if (stockNuevo !== stockOriginal) {
-                huboCambios = true;
-                try {
-                    const res = await fetch("http://localhost:4000/api/modificarStock", {
-                        method: "PUT",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: token
-                        },
-                        body: JSON.stringify({
-                            id_inventario: idInventario,
-                            stock: stockNuevo
-                        })
-                    });
+//             if (stockNuevo !== stockOriginal) {
+//                 huboCambios = true;
+//                 try {
+//                     const res = await fetch("http://localhost:4000/api/modificarStock", {
+//                         method: "PUT",
+//                         headers: {
+//                             "Content-Type": "application/json",
+//                             Authorization: token
+//                         },
+//                         body: JSON.stringify({
+//                             id_inventario: idInventario,
+//                             stock: stockNuevo
+//                         })
+//                     });
 
-                    const data = await res.json();
-                    if (data.codigo === 200) {
-                        console.log(`✅ Stock modificado para ID ${idInventario}`);
-                    } else {
-                        console.warn(`⚠️ Error modificando stock ID ${idInventario}: ${data.mensaje}`);
-                    }
-                } catch (err) {
-                    console.error(`❌ Error al enviar PUT para ID ${idInventario}:`, err);
-                }
-            }
-        }
+//                     const data = await res.json();
+//                     if (data.codigo === 200) {
+//                         console.log(`✅ Stock modificado para ID ${idInventario}`);
+//                     } else {
+//                         console.warn(`⚠️ Error modificando stock ID ${idInventario}: ${data.mensaje}`);
+//                     }
+//                 } catch (err) {
+//                     console.error(`❌ Error al enviar PUT para ID ${idInventario}:`, err);
+//                 }
+//             }
+//         }
 
-        if (!huboCambios) {
-            alert("No realizaste cambios de stock");
-            return;
-        }
+//         if (!huboCambios) {
+//             alert("No realizaste cambios de stock");
+//             return;
+//         }
 
-        alert("Cambios guardados");
-        formulario.reset();
-        formulario.classList.add("oculto");
-        cargarProductos();
-    });
-}
+//         alert("Cambios guardados");
+//         formulario.reset();
+//         formulario.classList.add("oculto");
+//         cargarProductos();
+//     });
+// }
 
 
