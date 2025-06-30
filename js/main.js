@@ -5,7 +5,7 @@ const btnGestion = document.getElementById("btn-gestion");
 const selectCategoria = document.getElementById('categoria');
 const inputProductos = document.getElementById("input-productos");
 const buscadorProductos = document.getElementById("buscador-productos");
-const botonFavoritos = document.getElementById("btn-favoritos"); 
+const botonFavoritos = document.getElementById("btn-favoritos");
 
 let todosLosProductos = [];
 
@@ -84,8 +84,7 @@ async function cargarProductosEnPagina() {
     try {
         const res = await fetch('http://localhost:4000/api/obtenerProductos');
         const data = await res.json();
-        todosLosProductos = data.payload[0];
-        console.log(todosLosProductos);
+        todosLosProductos = data.payload;
 
         mostrarProductos(todosLosProductos);
     } catch (error) {
@@ -102,23 +101,34 @@ function mostrarProductos(productos) {
         tarjeta.classList.add('tarjeta');
 
         tarjeta.innerHTML = `
-            <img src="${prod.imagen || prod.ulrImagen || ""}" alt="${prod.producto
-            }" class="img-producto">
-            <div class="descripcion">
-                <strong class="nombre-producto">${prod.producto}</strong><br>
-                ${prod.descripcion}<br>
-                <small class="precio">$${prod.precio}</small><br>
-                <small class="categoria">Categoría: ${prod.categoria}</small>
-            </div>
-            <div class="botones">
-                <button class="btn-comprar" id="btn-comprar">Comprar</button>
-                <button class="btn-ver">Ver Producto</button>
-            </div>
-        `;
+    <img src="${prod.imagen || prod.ulrImagen || ""}" alt="${prod.producto}" class="img-producto">
+    <div class="descripcion">
+        <strong class="nombre-producto">${prod.producto}</strong><br>
+        ${prod.descripcion}<br>
+        <small class="precio">$${prod.precio}</small><br>
+        <small class="categoria">Categoría: ${prod.categoria}</small>
+    </div>
+    <div class="botones">
+        <button class="btn-comprar" id="btn-comprar">Comprar</button>
+        <button class="btn-ver" data-id="${prod.producto}">Ver Producto</button>
+    </div>
+  `;
+
+        const btnVer = tarjeta.querySelector('.btn-ver');
+        btnVer.addEventListener('click', () => {
+            const id = btnVer.dataset.id;
+            console.log("🔵 ID del producto:", id);
+            if (id) {
+                window.location.href = `/pages/detalleProducto.html?id=${id}`;
+            } else {
+                alert("No se pudo obtener el ID del producto.");
+            }
+        });
 
         contenedor.appendChild(tarjeta);
     });
 }
+
 
 async function cargarCategorias() {
     const token = localStorage.getItem("token");
