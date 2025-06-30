@@ -1,5 +1,5 @@
-const botonComprar = document.getElementById("btn-comprar");
+// const botonComprar = document.getElementById("btn-comprar");
 
-botonComprar.addEventListener('click', () => {
+// botonComprar.addEventListener('click', () => {
     
-});
+// });

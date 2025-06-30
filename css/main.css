@@ -129,10 +129,11 @@ main {
     align-items: center;
     text-align: center;
     transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
 }
 
 .tarjeta:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     box-shadow: 0 10px 18px #00000026;
 }
 
@@ -237,6 +238,27 @@ footer {
 .creditos {
     margin-top: 10px;
     text-align: center;
+}
+
+.agregar-estrella,
+.estrella-agregada {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    z-index: 10;
+}
+
+.agregar-estrella:hover,
+.estrella-agregada:hover {
+    transform: translateY(-4px);
+}
+
+.estrella-agregada {
+    display: none;
 }
 
 

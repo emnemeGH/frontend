@@ -85,3 +85,4 @@ function mostrarProductos(favoritos) {
         container.appendChild(div);
     });
 }
+
