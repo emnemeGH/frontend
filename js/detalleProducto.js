@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    // El boton se ve solo si es admin
+    esAdmin(usuario);
 
     if (!id) {
         alert("Falta el ID del producto en la URL");
@@ -27,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        const prod = inventario[0]; // Tomamos la primera fila para los datos generales
+        const prod = inventario[0];
 
         // Mostrar info general
         const infoHTML = `
@@ -46,17 +49,78 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         inventario.forEach(item => {
             const fila = `
-                <tr>
-                    <td>${item.talle}</td>
-                    <td>${item.color}</td>
-                    <td>${item.stock}</td>
-                </tr>
-            `;
+        <tr>
+            <td>${item.talle}</td>
+            <td>${item.color}</td>
+            <td>
+                ${usuario?.rol === 'admin'
+                    ? `<input type="number" class="stock-input" data-id="${item.idInventario}" value="${item.stock}">`
+                    : item.stock
+                }
+            </td>
+        </tr>
+    `;
             tbody.insertAdjacentHTML("beforeend", fila);
         });
+
 
     } catch (err) {
         console.error("Error al cargar el producto:", err);
         alert("Error inesperado.");
     }
 });
+
+function esAdmin(usuario) {
+    if (usuario?.rol !== "admin") return;
+
+    const contenedor = document.getElementById("modificarStock");
+    contenedor.innerHTML = `
+        <button id="btnGuardarStock">Guardar Stock</button>
+        <div id="mensajeExito" style="display: none; color: green; margin-top: 10px;">
+            Stock actualizado con éxito.
+        </div>
+    `;
+
+    // Escuchar clic en "Guardar"
+    document.getElementById("btnGuardarStock").addEventListener("click", async () => {
+        const token = localStorage.getItem("token");
+        const inputs = document.querySelectorAll(".stock-input");
+        const modificaciones = [];
+
+        inputs.forEach(input => {
+            const id = input.dataset.id;
+            const nuevoStock = parseInt(input.value);
+            const stockOriginal = parseInt(input.defaultValue);
+
+            if (nuevoStock !== stockOriginal) {
+                modificaciones.push({ id_inventario: id, stock: nuevoStock });
+            }
+        });
+
+        if (modificaciones.length === 0) {
+            alert("No hay cambios para guardar.");
+            return;
+        }
+
+        try {
+            for (const modif of modificaciones) {
+                await fetch("http://localhost:4000/api/modificarStock", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: token
+                    },
+                    body: JSON.stringify(modif)
+                });
+            }
+
+            document.getElementById("mensajeExito").style.display = "block";
+            setTimeout(() => location.reload(), 1500); // recarga para mostrar datos actualizados
+
+        } catch (err) {
+            console.error("Error al actualizar stock:", err);
+            alert("Hubo un error al guardar los cambios.");
+        }
+    });
+}
+
