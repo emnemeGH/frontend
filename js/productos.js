@@ -56,7 +56,7 @@ async function cargarProductos() {
         <p>$${prod.precio}</p><br>
       </div>
       <div>
-        <button class="btn-editar" data-id="${prod.id_producto}">Editar</button>
+        <button class="btn-editar" data-id="${idProducto}">Editar</button>
         <button class="btn-eliminar">Eliminar</button>
       </div>
     `;
@@ -266,3 +266,82 @@ formulario.addEventListener("submit", async (e) => {
         console.error("Error al cargar producto:", err);
     }
 });
+
+// function mostrarFormularioEdicion(inventario) {
+//     const formulario = document.getElementById("formProducto");
+//     formulario.classList.remove("oculto");
+
+//     const contenedorTalles = formulario.querySelector(".talles");
+//     contenedorTalles.innerHTML = "";
+
+//     inventario.forEach(item => {
+//         console.log("📦 Item de inventario:", item); // Debug clave
+//         const div = document.createElement("div");
+//         div.innerHTML = `
+//             <label>${item.color} - ${item.talle}:</label>
+//             <input type="number" min="0"
+//                 value="${item.stock}"
+//                 data-id="${item.idInventario}"
+//                 data-original="${item.stock}"
+//                 class="campo-stock" />
+//         `;
+//         contenedorTalles.appendChild(div);
+//     });
+
+//     const btnGuardar = document.createElement("button");
+//     btnGuardar.id = "btnGuardarCambios";
+//     btnGuardar.textContent = "Guardar cambios de stock";
+//     formulario.appendChild(btnGuardar);
+
+//     btnGuardar.addEventListener("click", async (e) => {
+//         e.preventDefault();
+//         const token = localStorage.getItem("token");
+
+//         const campos = formulario.querySelectorAll(".campo-stock");
+//         let huboCambios = false;
+
+//         for (const input of campos) {
+//             const stockNuevo = parseInt(input.value);
+//             const stockOriginal = parseInt(input.dataset.original);
+//             const idInventario = parseInt(input.dataset.id);
+
+//             if (stockNuevo !== stockOriginal) {
+//                 huboCambios = true;
+//                 try {
+//                     const res = await fetch("http://localhost:4000/api/modificarStock", {
+//                         method: "PUT",
+//                         headers: {
+//                             "Content-Type": "application/json",
+//                             Authorization: token
+//                         },
+//                         body: JSON.stringify({
+//                             id_inventario: idInventario,
+//                             stock: stockNuevo
+//                         })
+//                     });
+
+//                     const data = await res.json();
+//                     if (data.codigo === 200) {
+//                         console.log(`✅ Stock modificado para ID ${idInventario}`);
+//                     } else {
+//                         console.warn(`⚠️ Error modificando stock ID ${idInventario}: ${data.mensaje}`);
+//                     }
+//                 } catch (err) {
+//                     console.error(`❌ Error al enviar PUT para ID ${idInventario}:`, err);
+//                 }
+//             }
+//         }
+
+//         if (!huboCambios) {
+//             alert("No realizaste cambios de stock");
+//             return;
+//         }
+
+//         alert("Cambios guardados");
+//         formulario.reset();
+//         formulario.classList.add("oculto");
+//         cargarProductos();
+//     });
+// }
+
+

@@ -86,7 +86,8 @@ async function cargarProductosEnPagina() {
     try {
         const res = await fetch('http://localhost:4000/api/obtenerProductos');
         const data = await res.json();
-        todosLosProductos = data.payload;
+        todosLosProductos = data.payload[0];
+        console.log(todosLosProductos);
 
         mostrarProductos(todosLosProductos);
     } catch (error) {
@@ -126,7 +127,6 @@ function mostrarProductos(productos) {
         agregarEventosALasEstrellas(tarjeta, prod);
     });
 }
-
 
 async function cargarCategorias() {
     const token = localStorage.getItem("token");
