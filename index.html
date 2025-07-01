@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lana & Lino</title>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/carrito.css">
 </head>
 
 <body>
@@ -33,7 +34,8 @@
 
         <div class="header-derecha">
             <div class="header-gestion">
-                <button id="btn-gestion"><img src="img/agregarProducto.png" alt="Gestion de Productos" title="Gestion de Productos" /></button>
+                <button id="btn-gestion"><img src="img/agregarProducto.png" alt="Gestion de Productos"
+                        title="Gestion de Productos" /></button>
             </div>
 
             <div class="header-sesion">
@@ -42,7 +44,7 @@
             </div>
 
             <div class="header-carrito">
-                <button><img src="img/grocery-store.png" alt="Carrito" title="Carrito" /></button>
+                <button id="btn-carrito"><img src="img/grocery-store.png" alt="Carrito" title="Carrito" /></button>
             </div>
 
             <div class="header-usuario">
@@ -57,9 +59,23 @@
 
     <main>
         <section id="productos-lista" class="productos-grid">
-            
+
         </section>
     </main>
+
+    <div id="modal-carrito" class="modal-carrito">
+        <div class="modal-contenido">
+            <h2>Tu carrito</h2>
+            <div id="carrito-items" class="carrito-items"></div>
+            <div class="carrito-total">
+                Total: $<span id="total-carrito">0</span>
+            </div>
+            <div class="carrito-acciones">
+                <button id="btn-pagar" class="btn-pagar">Pagar</button>
+                <button id="cerrar-carrito" class="btn-cerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
 
 
     <footer>

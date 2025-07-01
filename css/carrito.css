@@ -1,0 +1,114 @@
+.modal-carrito {
+    position: fixed;
+    top: 80px;
+    right: 0;
+    width: 350px;
+    background: #f1f1f1;
+    box-shadow: -2px 0 10px #00000033;
+    padding: 20px;
+    z-index: 1000;
+    /*  transform: translateX(100%) Mueve el elemento horizontalmente (eje X).
+    100% significa el ancho completo del propio elemento. 
+    Entonces, lo está empujando hacia la derecha, fuera de su lugar original.*/
+    transform: translateX(100%);
+    /* animación suave al empezar y terminar */
+    transition: transform 0.3s ease-in-out;
+}
+
+.modal-carrito.visible {
+    /* Vuelve a su posición original */
+    transform: translateX(0);
+}
+
+.modal-contenido {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.carrito-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.carrito-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.prod-imagen {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    object-position: top;
+}
+
+.carrito-total {
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.btn-eliminar {
+    margin-top: 10px;
+    margin-right: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-img {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    right: 0;
+    margin-right: 20px;
+    margin-top: -15px;
+    /* La propiedad filter: brightness(0.7); oscurece el elemento (por ejemplo, una imagen) aplicándole un filtro de brillo. */
+    filter: brightness(0.7);
+    transition: transform 0.2s ease;
+}
+
+.delete-img:hover {
+    transform: scale(1.1);
+    filter: brightness(1);
+}
+
+.carrito-acciones {
+    display: flex;
+    justify-content: space-around;
+    gap: 80px;
+    margin-top: 15px;
+}
+
+.btn-pagar,
+.btn-cerrar {
+    min-width: 115px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-pagar {
+    background-color: #6a3793;
+    color: #fff;
+}
+
+.btn-pagar:hover {
+    background-color: #542c77;
+}
+
+.btn-cerrar {
+    background-color: #e0d2eb;
+    color: #4a2b6d;
+}
+
+.btn-cerrar:hover {
+    background-color: #d3c1e3;
+}
+
