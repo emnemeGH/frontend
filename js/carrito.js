@@ -5,27 +5,11 @@ const contenedorItems = document.getElementById("carrito-items");
 const totalCarrito = document.getElementById("total-carrito");
 const btnPagar = document.getElementById("btn-pagar");
 
-let carrito_obj = [
-    {
-        id: 1,
-        nombre: "Remera de lino",
-        precio: 5000,
-        imagen: "https://http2.mlstatic.com/D_NQ_NP_953602-MLA84646517499_052025-O.webp"
-    },
-    {
-        id: 2,
-        nombre: "Camisa blanca",
-        precio: 7000,
-        imagen: "https://http2.mlstatic.com/D_NQ_NP_953602-MLA84646517499_052025-O.webp"
-    }
-];
-
-modalCarrito.classList.toggle("visible");
-cargarCarrito();
+let carrito_obj = [];
 
 btnCarrito.addEventListener("click", () => {
     modalCarrito.classList.toggle("visible");
-    cargarCarrito();
+    obtenerCarrito();
 });
 
 cerrarCarrito.addEventListener("click", () => {
@@ -36,7 +20,41 @@ btnPagar.addEventListener("click", () => {
     window.location.href = "/pages/pago.html";
 });
 
-function cargarCarrito() {
+async function obtenerCarrito() {
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    const token = localStorage.getItem("token");
+
+    if (!usuario || !token) {
+        alert("Usuario no logueado");
+        return;
+    }
+
+    try {
+        const res = await fetch(`http://localhost:4000/api/obtenerProductosCarrito/${usuario.id_usuario}`, {
+            headers: {
+                Authorization: token
+            }
+        });
+
+        const data = await res.json();
+
+        if (data.codigo === 200) {
+            carrito_obj = data.payload.map(prod => ({
+                id: prod.idProducto,
+                nombre: prod.producto,
+                precio: parseFloat(prod.precio),
+                imagen: prod.urlImagen
+            }));
+            mostrarCarrito();
+        } else {
+            console.error("Error al obtener productos:", data.mensaje);
+        }
+    } catch (err) {
+        console.error("Error de red:", err);
+    }
+}
+
+function mostrarCarrito() {
     contenedorItems.innerHTML = "";
     let total = 0;
 
@@ -64,7 +82,7 @@ function cargarCarrito() {
             const id = parseInt(e.target.getAttribute("data-id"));
             console.log(e.target)
             carrito_obj = carrito_obj.filter(prod => prod.id !== id)
-            cargarCarrito();
+            mostrarCarrito();
         });
     });
 }
