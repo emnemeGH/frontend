@@ -2,8 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
     const usuario = JSON.parse(localStorage.getItem('usuario'));
-    // El boton se ve solo si es admin
-    esAdmin(usuario);
+    
 
     if (!id) {
         alert("Falta el ID del producto en la URL");
@@ -46,14 +45,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       <p><strong>Categoria:</strong><br>${prod.categoria}</p>
     </div>
   </div>
-  <div class="stock-grid" id="contenedorInventario"></div>
+  <div class="stock-grid" id="stockContainer"></div>
         `;
         document.getElementById("infoProducto").innerHTML = infoHTML;
 
         // Mostrar inventario
-        const contenedorInv = document.getElementById("contenedorInventario");
+        const contenedorInv = document.getElementById("stockContainer");
         contenedorInv.innerHTML = "";
 
+        
         inventario.forEach(item => {
             const tarjeta = document.createElement("div");
             tarjeta.classList.add("stock-card");
@@ -61,13 +61,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             tarjeta.innerHTML = `
         <p><strong>Talle:</strong> ${item.talle}</p>
         <p><strong>Color:</strong> ${item.color}</p>
-        <p><strong>Stock:</strong> ${item.stock}</p>
+        <p class="stock-placeholder"><strong>Stock:</strong> ${item.stock}</p>
         <button class="btn-agregar" data-id="${item.idInventario}">Agregar carrito</button>
         `;
 
             contenedorInv.appendChild(tarjeta);
 
-            // Lógica de agregar al carrito
+            // Agregar al carrito
             const btnAgregar = tarjeta.querySelector(".btn-agregar");
 
             btnAgregar.addEventListener("click", async () => {
@@ -107,6 +107,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
         });
+        // El boton se ve solo si es admin
+    esAdmin(usuario);
 
 
     } catch (err) {
@@ -120,22 +122,23 @@ function esAdmin(usuario) {
 
     const contenedor = document.getElementById("modificarStock");
     contenedor.innerHTML = `
-        <button id="btnGuardarStock">Guardar Stock</button>
+    <div class="contenedor-boton-guardar">
+        <button id="btnGuardarStock" class="btn-guardar">Guardar Stock</button>
+    </div>
         <div id="mensajeExito" style="display: none; color: green; margin-top: 10px;">
             Stock actualizado con éxito.
         </div>
     `;
 
-    // Esperar que se rendericen las tarjetas
+   // Esperar que se rendericen las tarjetas
     setTimeout(() => {
         const stockCards = document.querySelectorAll(".stock-card");
 
         stockCards.forEach(card => {
-            const stockP = card.querySelector("p:nth-child(3)"); // el <p> de Stock
+            const stockP = card.querySelector(".stock-placeholder");
             const texto = stockP.textContent;
             const valor = parseInt(texto.replace("Stock:", "").trim());
 
-            // Reemplazar el <p> por un <input>
             const input = document.createElement("input");
             input.type = "number";
             input.classList.add("stock-input");
@@ -147,7 +150,7 @@ function esAdmin(usuario) {
         });
     }, 0);
 
-    // Escuchar clic en "Guardar"
+    // Botón guardar
     document.getElementById("btnGuardarStock").addEventListener("click", async () => {
         const token = localStorage.getItem("token");
         const inputs = document.querySelectorAll(".stock-input");
@@ -190,3 +193,12 @@ function esAdmin(usuario) {
     });
 }
 
+document.getElementById("btn-volver").addEventListener("click", () => {
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+    if (usuario?.rol === "admin") {
+        window.location.href = "/pages/productos.html";
+    } else {
+        window.location.href = "/index.html";
+    }
+});

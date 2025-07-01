@@ -123,3 +123,23 @@ h1 {
 .btn-agregar:hover {
   background-color: #50376d;
 }
+
+.btn-guardar {
+  background-color: #6c4c91;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+
+}
+
+.contenedor-boton-guardar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btn-guardar:hover {
+  background-color: #50376d;
+}

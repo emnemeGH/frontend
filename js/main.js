@@ -90,13 +90,10 @@ async function cargarProductosEnPagina() {
         const data = await res.json();
         todosLosProductos = data.payload[0];
 
-        console.log(todosLosProductos)
-
         todosLosProductos.forEach(prod => {
             ids_productos.push(prod.idProducto);
         })
 
-        console.log(ids_productos);
         mostrarProductos(todosLosProductos);
     } catch (error) {
         console.error('Error al cargar productos para la página:', error);

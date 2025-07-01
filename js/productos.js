@@ -66,7 +66,7 @@ async function cargarProductos() {
 
                 btnEliminar.addEventListener("click", async () => {
                     const idProducto = btnEliminar.getAttribute('data-id');
-                    console.log("ID del producto a eliminar (capturado):", idProducto);
+                    console.log("ID del producto a eliminar:", idProducto);
 
                     const confirmar = confirm("¿Estás seguro de que deseas eliminar este producto?");
                     if (!confirmar) return;
