@@ -34,33 +34,38 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Mostrar info general
         const infoHTML = `
-            <h2>${prod.producto}</h2>
-            <img src="${prod.ulrImagen}" alt="${prod.producto}">
-            <p><strong>Descripción:</strong> ${prod.descripcion}</p>
-            <p><strong>Precio:</strong> $${prod.precio}</p>
-            <p><strong>Género:</strong> ${prod.genero}</p>
-            <p><strong>Categoría:</strong> ${prod.categoria}</p>
+        <div class="detalle-producto">
+    <div class="columna-izquierda">
+      <h2>${prod.producto}</h2>
+      <img src="${prod.ulrImagen}" alt="${prod.producto}">
+    </div>
+    <div class="columna-derecha">
+      <p><strong>Descripcion:</strong><br>${prod.descripcion}</p>
+      <p><strong>Precio:</strong><br>$${prod.precio}</p>
+      <p><strong>Genero:</strong><br>${prod.genero}</p>
+      <p><strong>Categoria:</strong><br>${prod.categoria}</p>
+    </div>
+  </div>
+  <div class="stock-grid" id="contenedorInventario"></div>
         `;
         document.getElementById("infoProducto").innerHTML = infoHTML;
 
         // Mostrar inventario
-        const tbody = document.querySelector("#tablaInventario tbody");
-        tbody.innerHTML = "";
+        const contenedorInv = document.getElementById("contenedorInventario");
+contenedorInv.innerHTML = "";
 
-        inventario.forEach(item => {
-            const fila = `
-        <tr>
-            <td>${item.talle}</td>
-            <td>${item.color}</td>
-            <td>
-                ${usuario?.rol === 'admin'
-                    ? `<input type="number" class="stock-input" data-id="${item.idInventario}" value="${item.stock}">`
-                    : item.stock
-                }
-            </td>
-        </tr>
-    `;
-            tbody.insertAdjacentHTML("beforeend", fila);
+inventario.forEach(item => {
+  const tarjeta = document.createElement("div");
+  tarjeta.classList.add("stock-card");
+
+  tarjeta.innerHTML = `
+    <p><strong>Talle:</strong> ${item.talle}</p>
+    <p><strong>Color:</strong> ${item.color}</p>
+    <p><strong>Stock:</strong> ${item.stock}</p>
+    <button class="btn-agregar">Agregar carrito</button>
+  `;
+
+  contenedorInv.appendChild(tarjeta);
         });
 
 
@@ -115,7 +120,7 @@ function esAdmin(usuario) {
             }
 
             document.getElementById("mensajeExito").style.display = "block";
-            setTimeout(() => location.reload(), 1000); 
+            setTimeout(() => location.reload(), 1000);
 
         } catch (err) {
             console.error("Error al actualizar stock:", err);

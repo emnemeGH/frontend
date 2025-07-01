@@ -232,7 +232,7 @@ formulario.addEventListener("submit", async (e) => {
             alert("Producto creado correctamente");
 
             console.log("Payload recibido al crear producto:", data.payload);
-            const idProducto = data.payload[0].id_producto || data.payload[0].idProducto || data.payload[0].idCategoria;
+            const idProducto = data.payload[0].id_producto || data.payload[0].idProducto
             console.log("ID del producto creado:", idProducto);
 
 

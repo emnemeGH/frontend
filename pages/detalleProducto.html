@@ -6,27 +6,21 @@
     <link rel="stylesheet" href="/css/detalleProducto.css">
 </head>
 <body>
+    <button type="button" onclick="window.location.href='/index.html'" class="btn-volver">Volver</button>
+    
+    <div class="container">
+        <h1>Detalle del Producto</h1>
 
-    <h1>Detalle del Producto</h1>
+        <div class="detalle-producto" id="infoProducto">
+            <!-- Aquí se inyecta la imagen y detalles -->
+        </div>
 
-    <div class="producto" id="infoProducto">
-        <!-- Aquí se mostrará la info del producto -->
+        <div id="stockContainer" class="stock-grid">
+            <!-- Aquí se inyectan los bloques de stock -->
+        </div>
+
+        <div id="modificarStock" style="margin-top: 30px;"></div>
     </div>
-
-    <table id="tablaInventario">
-        <thead>
-            <tr>
-                <th>Talle</th>
-                <th>Color</th>
-                <th>Stock</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Inventario se carga aquí -->
-        </tbody>
-    </table>
-
-    <div id="modificarStock" style="margin-top: 30px;"></div>
 
     <script src="/js/detalleProducto.js"></script>
 </body>
