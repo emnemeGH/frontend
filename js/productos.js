@@ -18,10 +18,13 @@ async function cargarProductos() {
         const res = await fetch('http://localhost:4000/api/obtenerProductos');
         const data = await res.json();
         const productos = data.payload[0];
-
+        const eliminados = JSON.parse(localStorage.getItem("productosEliminados")) || [];
+        
         // Crear mapa de categorías con productos
         const categoriasMap = {};
         productos.forEach(p => {
+            if (eliminados.includes(String(p.idProducto))) return; // No mostrar si está eliminado
+            
             const nombre = p.categoria;
             if (!categoriasMap[nombre]) {
                 categoriasMap[nombre] = [];
@@ -55,10 +58,30 @@ async function cargarProductos() {
       </div>
       <div>
         <button class="btn-editar" data-id="${idProducto}">Editar</button>
-        <button class="btn-eliminar">Eliminar</button>
+        <button class="btn-eliminar" data-id="${idProducto}">Eliminar</button>
       </div>
     `;
+                // BOTÓN ELIMINAR
+                const btnEliminar = tarjeta.querySelector(".btn-eliminar");
 
+                btnEliminar.addEventListener("click", async () => {
+                    const idProducto = btnEliminar.getAttribute('data-id');
+                    console.log("ID del producto a eliminar (capturado):", idProducto);
+
+                    const confirmar = confirm("¿Estás seguro de que deseas eliminar este producto?");
+                    if (!confirmar) return;
+
+                    // Guardar el ID en localStorage
+                    let eliminados = JSON.parse(localStorage.getItem("productosEliminados")) || [];
+                    eliminados.push(idProducto);
+                    localStorage.setItem("productosEliminados", JSON.stringify(eliminados));
+
+                    // Ocultar la tarjeta visualmente
+                    tarjeta.style.display = "none";
+                });
+
+
+                //BOTON EDITAR
                 const btnEditar = tarjeta.querySelector(".btn-editar");
 
                 btnEditar.addEventListener("click", async () => {
@@ -174,6 +197,7 @@ formulario.addEventListener("submit", async (e) => {
     const genero = document.getElementById("genero").value;
     const id_categoria = parseInt(document.getElementById("categoria").value);
     const imagen = document.getElementById("imagen").value.trim();
+    const color = document.getElementById("color").value.trim();
 
     if (!id_categoria) {
         alert("Seleccioná una categoría válida.");
@@ -186,7 +210,8 @@ formulario.addEventListener("submit", async (e) => {
         precio,
         genero,
         id_categoria,
-        imagen
+        imagen,
+        color
     };
 
     try {
@@ -252,82 +277,4 @@ formulario.addEventListener("submit", async (e) => {
         console.error("Error al cargar producto:", err);
     }
 });
-
-// function mostrarFormularioEdicion(inventario) {
-//     const formulario = document.getElementById("formProducto");
-//     formulario.classList.remove("oculto");
-
-//     const contenedorTalles = formulario.querySelector(".talles");
-//     contenedorTalles.innerHTML = "";
-
-//     inventario.forEach(item => {
-//         console.log("📦 Item de inventario:", item); // Debug clave
-//         const div = document.createElement("div");
-//         div.innerHTML = `
-//             <label>${item.color} - ${item.talle}:</label>
-//             <input type="number" min="0"
-//                 value="${item.stock}"
-//                 data-id="${item.idInventario}"
-//                 data-original="${item.stock}"
-//                 class="campo-stock" />
-//         `;
-//         contenedorTalles.appendChild(div);
-//     });
-
-//     const btnGuardar = document.createElement("button");
-//     btnGuardar.id = "btnGuardarCambios";
-//     btnGuardar.textContent = "Guardar cambios de stock";
-//     formulario.appendChild(btnGuardar);
-
-//     btnGuardar.addEventListener("click", async (e) => {
-//         e.preventDefault();
-//         const token = localStorage.getItem("token");
-
-//         const campos = formulario.querySelectorAll(".campo-stock");
-//         let huboCambios = false;
-
-//         for (const input of campos) {
-//             const stockNuevo = parseInt(input.value);
-//             const stockOriginal = parseInt(input.dataset.original);
-//             const idInventario = parseInt(input.dataset.id);
-
-//             if (stockNuevo !== stockOriginal) {
-//                 huboCambios = true;
-//                 try {
-//                     const res = await fetch("http://localhost:4000/api/modificarStock", {
-//                         method: "PUT",
-//                         headers: {
-//                             "Content-Type": "application/json",
-//                             Authorization: token
-//                         },
-//                         body: JSON.stringify({
-//                             id_inventario: idInventario,
-//                             stock: stockNuevo
-//                         })
-//                     });
-
-//                     const data = await res.json();
-//                     if (data.codigo === 200) {
-//                         console.log(`✅ Stock modificado para ID ${idInventario}`);
-//                     } else {
-//                         console.warn(`⚠️ Error modificando stock ID ${idInventario}: ${data.mensaje}`);
-//                     }
-//                 } catch (err) {
-//                     console.error(`❌ Error al enviar PUT para ID ${idInventario}:`, err);
-//                 }
-//             }
-//         }
-
-//         if (!huboCambios) {
-//             alert("No realizaste cambios de stock");
-//             return;
-//         }
-
-//         alert("Cambios guardados");
-//         formulario.reset();
-//         formulario.classList.add("oculto");
-//         cargarProductos();
-//     });
-// }
-
 

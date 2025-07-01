@@ -115,7 +115,7 @@ function esAdmin(usuario) {
             }
 
             document.getElementById("mensajeExito").style.display = "block";
-            setTimeout(() => location.reload(), 1500); // recarga para mostrar datos actualizados
+            setTimeout(() => location.reload(), 1000); 
 
         } catch (err) {
             console.error("Error al actualizar stock:", err);
