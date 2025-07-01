@@ -42,6 +42,7 @@ async function obtenerCarrito() {
             carrito_obj = data.payload.map(prod => ({
                 id: prod.idProducto,
                 nombre: prod.producto,
+                idInventario: prod.idInventario,
                 precio: parseFloat(prod.precio),
                 imagen: prod.urlImagen
             }));
@@ -68,7 +69,7 @@ function mostrarCarrito() {
                 <strong>${prod.nombre}</strong><br>
                 <small>$${prod.precio}</small>
             </div>
-            <button class="btn-eliminar"><img src="../img/delete.png" class="delete-img" data-id="${prod.id}"></button>
+            <button class="btn-eliminar"><img src="../img/delete.png" class="delete-img" data-id="${prod.idInventario}"></button>
         `;
 
         contenedorItems.appendChild(div);
@@ -78,11 +79,36 @@ function mostrarCarrito() {
     totalCarrito.textContent = total;
 
     document.querySelectorAll(".btn-eliminar").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            const id = parseInt(e.target.getAttribute("data-id"));
-            console.log(e.target)
-            carrito_obj = carrito_obj.filter(prod => prod.id !== id)
-            mostrarCarrito();
+        btn.addEventListener("click", async (e) => {
+            const idInventario = parseInt(e.target.getAttribute("data-id"));
+            const usuario = JSON.parse(localStorage.getItem("usuario"));
+            const token = localStorage.getItem("token");
+
+            try {
+                const res = await fetch("http://localhost:4000/api/eliminarProductoCarrito", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: token
+                    },
+                    body: JSON.stringify({
+                        id_usuario: usuario.id_usuario,
+                        id_inventario: idInventario
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.codigo === 200) {
+                    carrito_obj = carrito_obj.filter(prod => prod.idInventario !== idInventario);
+                    alert("Producto eliminado correctamente")
+                    mostrarCarrito();
+                } else {
+                    alert("No se pudo eliminar el producto del carrito: " + data.mensaje);
+                }
+            } catch (err) {
+                console.error("Error al eliminar producto:", err);
+            }
         });
     });
 }
