@@ -125,7 +125,6 @@ function mostrarProductos(productos) {
                 <small class="categoria">Categoría: ${prod.categoria}</small>
             </div>
             <div class="botones">
-                <button class="btn-comprar" id="btn-comprar">Comprar</button>
                 <button class="btn-ver" data-id="${prod.idProducto}">Ver Producto</button>
             </div>
         `;
