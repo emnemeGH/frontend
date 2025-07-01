@@ -87,7 +87,7 @@ async function eliminarFavorito(producto, estrellaVacia, estrellaLlena) {
     const token = localStorage.getItem("token");
 
     if (!usuario || !token) {
-        alert("Tenés que iniciar sesión para añadir a favoritos.");
+        alert("error");
         return;
     }
 

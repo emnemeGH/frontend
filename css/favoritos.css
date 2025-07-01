@@ -11,6 +11,20 @@ body {
     background: linear-gradient(to right, #fce4ec, #e1cae6, #fce4ec);
 }
 
+.btn-volver {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #544477;
+    color: #ffffff;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    margin-left: 20px;
+    top: 20px;
+}
+
 header {
     font-family: 'Inter', sans-serif;
     width: 100vw;
@@ -44,6 +58,7 @@ main {
 }
 
 .tarjeta {
+    position: relative;
     max-width: 250px;
     max-height: 500px;
     margin-top: 20px;
@@ -85,4 +100,19 @@ main {
     font-size: 1rem;
     color: #777;
     margin: 0;
+}
+
+.estrella-agregada {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    z-index: 10;
+}
+
+.estrella-agregada:hover {
+    transform: translateY(-4px);
 }
