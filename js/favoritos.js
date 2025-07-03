@@ -57,7 +57,12 @@ async function fetchProductoPorId(id) {
         });
         const data = await res.json();
         const producto_favorito = data.payload;
-        return producto_favorito;
+
+        const favoritosUnicos = producto_favorito.filter((producto, index, self) =>
+            index === self.findIndex(p => p.idProducto === producto.idProducto)
+        );
+
+        return favoritosUnicos;
     } catch (error) {
         console.error("Error pidiendo producto", id, error);
         return null;
